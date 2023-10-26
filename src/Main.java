@@ -24,6 +24,8 @@ public class Main {
        MporCarrera();
        HporCarrera();
        PMporCarrera();
+       PMayor();
+       PpromCarrera();
 
 
     }
@@ -103,10 +105,32 @@ public class Main {
         System.out.println("Puntajes Máximos por carrera");
         EporCarrera.forEach((k,v)->
         {
-            System.out.print(" En la Carrera " +k );
+            System.out.print(" En la Carrera " +k + ": ");
             Stream<Students> nueva= estudiantes.stream().filter(x->x.getCareer_aspiration().equals(k));
-            ArrayList<Integer> n = new ArrayList<Integer>();
-            nueva.forEach(x->n.add(x.getMath_score()));
+            Integer max= nueva.map(x->x.getMath_score()).collect(Collectors.toList()).stream().max(Integer::compare).get();
+            System.out.println(max);
+            estudiantes.stream().filter(x->x.getCareer_aspiration().equals(k)).filter(x->x.getMath_score()==max).forEach(x-> System.out.println(x.getFirst_name() + " " + x.getLast_name()));
+        });
+
+    }
+    static void PMayor()
+    {
+        System.out.print("El mayor puntaje de todos es:  ");
+        Integer max= estudiantes.stream().map(x->x.getMath_score()).collect(Collectors.toList()).stream().max(Integer::compare).get();
+        System.out.println(max);
+        estudiantes.stream().filter(x->x.getMath_score()==max).forEach(x-> System.out.println("El estudiante: "+ x.getFirst_name() + " " + x.getLast_name() + " tiene este puntaje."));
+    }
+
+    static void PpromCarrera()
+    {
+        System.out.println("Puntajes promedio por carrera");
+        EporCarrera.forEach((k,v)->
+        {
+            System.out.print(" En la Carrera " +k + ": ");
+            Stream<Students> nueva= estudiantes.stream().filter(x->x.getCareer_aspiration().equals(k));
+            Double promedio= nueva.mapToInt(x->(int)x.getMath_score()).average().getAsDouble();
+            System.out.println(promedio);
+
         });
     }
 
